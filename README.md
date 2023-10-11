@@ -1,139 +1,152 @@
-# Ex-04-Multivariate-Analysis
+# EX 04 MULTIVARIATE ANALYSIS
 
-# AIM
-
+## Aim:
 To perform Multivariate EDA on the given data set.
 
-# Explanation:
-
+## Explanation:
 Exploratory data analysis is used to understand the messages within a dataset. This technique involves many iterative processes to ensure that the cleaned data is further sorted to better understand the useful meaning.The primary aim with exploratory analysis is to examine the data for distribution, outliers and anomalies to direct specific testing of your hypothesis.
 
-# ALGORITHM:
+## Algorithm:
 
-### STEP 1
+- Step1: Import the built libraries required to perform EDA and outlier removal.
+- Step2: Read the given csv file.
+- Step3: Convert the file into a dataframe and get information of the data.
+- Step4: Return the objects containing counts of unique values using (value_counts()).
+- Step5: Plot the counts in the form of Histogram or Bar Graph.
 
-Import the built libraries required to perform EDA and outlier removal.
-
-### STEP 2
-
-Read the given csv file
-
-### STEP 3
-
-Convert the file into a dataframe and get information of the data.
-
-### STEP 4
-
-Return the objects containing counts of unique values using (value_counts()).
-
-### STEP 5
-
-Plot the counts in the form of Histogram or Bar Graph.
-
-### STEP 6
-
-Use seaborn the bar graph comparison of data can be viewed.
-
-### STEP 7
-
-Find the pairwise correlation of all columns in the dataframe.corr()
-
-### STEP 8
-
-Save the final data set into the file
-
-# Program:
-
-```py
+## Program:
+- SuperStore.csv
 
 import pandas as pd
-import numpy as np
 import seaborn as sns
+from scipy import stats
 import matplotlib.pyplot as plt
-df = pd.read_csv("/content/SuperStore.csv")
-df.head()
+df=pd.read_csv('SuperStore.csv')
 df.describe()
 df.isnull().sum()
-df['Postal Code'] = df["Postal Code"].fillna(df['Postal Code'].mode()[0])
-df.isnull().sum()
-df.dtypes
-sns.scatterplot(x=df['Row ID'],y=df['Postal Code'])
-states=df.loc[:,["State","Sales"]]
-states=states.groupby(by=["State"]).sum().sort_values(by="Sales")
-plt.figure(figsize=(17,7))
-sns.barplot(x=states.index,y="Sales",data=states)
-plt.xticks(rotation = 90)
-plt.xlabel=("STATES")
-plt.ylabel=("SALES")
-plt.show()
-states=df.loc[:,["State","Row ID"]]
-states=states.groupby(by=["State"]).sum().sort_values(by="Row ID")
-sns.barplot(x=states.index,y="Row ID",data=states)
-plt.xticks(rotation = 90)
-plt.xlabel=("State")
-plt.ylabel=("ROW ID")
-plt.show()
-states=df.loc[:,["Segment","Row ID"]]
-states=states.groupby(by=["Segment"]).sum().sort_values(by="Row ID")
-sns.barplot(x=states.index,y="Row ID",data=states)
-plt.xticks(rotation = 90)
-plt.xlabel=("SEGMENT")
-plt.ylabel=("ROW ID")
-plt.show()
-sns.barplot(x=df['Sales'],y=df['Ship Mode'],hue=df['Category'])
-df.corr()
+df.info()
+
+## FILLING NULL VALUES
+
+df['Postal Code']=df['Postal Code'].fillna(df['Postal Code'].mode()[0])
+sns.boxplot(df)
+sns.scatterplot(x=df['Region'],y=df['Sales'])
+plt.figure(figsize=(10,3))
+sns.barplot(x=df['State'],y=df['Sales'])
+plt.xticks(rotation=90)
 sns.heatmap(df.corr(),annot=True)
-```
+sns.displot(df,x='Region',hue="Category")
 
-# OUTPUT:
+## Output:
 
-## DF
-![Screenshot 2023-05-29 221523](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/575a5384-b077-44df-b0fa-94f65cfa6048)
+-SuperStore.csv
+  
+<img height=20% width=35% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/319a4805-b9d3-4a61-9500-10fa72a9ea55">
+<img height=20% width=25% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/b5522c34-2e4e-4083-8115-1c57861d9971">
+<img height=20% width=35% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/10438e60-a3cc-437a-8aff-26f2820f5b41">
+
+<img height=25% width=40% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/5f012279-55d1-4d88-8ca3-e560607be7f5">
+<img height=25% width=50% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/6d913e29-1e8b-4398-8c36-b1a3579fabcb">
+
+<img height=25% width=100% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/10ad78c1-f66b-4e37-8d4a-a0c63366f360">
+
+<img height=25% width=40% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/c7b8247f-c1d5-457c-81d3-57a414d500f2">
+<img height=25% width=50% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/f4beff7c-1e30-436e-9827-d285fef2c576">
+
+-Diabetes.csv
+
+-import pandas as pd
+
+-import seaborn as sns
+
+-from scipy import stats
+
+-import matplotlib.pyplot as plt
+
+-df=pd.read_csv('diabetes.csv')
+
+-df.describe()
+
+-df.isnull().sum()
+
+## REMOVING OUTLIER
+
+z = np.abs(stats.zscore(df['Glucose']))
+
+df=df[(z<2)]
+
+z = np.abs(stats.zscore(dfc['BloodPressure']))
+
+df=df[(z<2)]
+
+z = np.abs(stats.zscore(dfc['SkinThickness']))
+
+df=df[(z<3)]
+
+z = np.abs(stats.zscore(dfc['BMI']))
+
+df=df[(z<2)]
+
+z = np.abs(stats.zscore(dfc['Insulin']))
+
+df=df[(z<2)]
+
+z = np.abs(stats.zscore(dfc['DiabetesPedigreeFunction']))
+
+df=df[(z<2)]
+
+z = np.abs(stats.zscore(dfc['Age']))
+
+df=df[(z<2)]
+
+z = np.abs(stats.zscore(dfc['Outcome']))
+
+df=df[(z<3)]
+
+sns.boxplot(data=dfc)
+
+plt.xticks(rotation=90)
+
+sns.boxplot(data=dfc)
+
+plt.xticks(rotation=90)
+
+sns.scatterplot(x=df['Glucose'], y=df['BloodPressure'], hue=df['Outcome'])
+
+Age=df.loc[:,["Age","BMI"]]
+
+Age=Age.groupby(by=["Age"]).sum().sort_values(by="BMI")
+
+plt.figure(figsize=(12,5))
+
+plt.xticks(rotation=90)
+
+sns.barplot(x=Age.index,y="BMI",data=Age)
+
+sns.boxplot(x=df['DiabetesPedigreeFunction'],y=df['Insulin'])
+
+sns.displot(df, x="Glucose", hue="Outcome")
+
+df.corr()
+
+sns.heatmap(df.corr(),annot=True)
+
+- Output (Diabetes.csv):
+
+<img height=15% width=75% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/9137a168-dab0-4a2e-a2f4-4238173bd287">
+<img height=15% width=20% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/fdc366f8-33f2-4874-9af3-d0e12763b9ef">
+
+<img height=25% width=45% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/bc1c32be-0000-47f3-a330-ff838e101f90">
+<img height=25% width=45% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/46028ead-2c8c-49fb-b546-ec4a3819e97d">
+
+<img height=25% width=45% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/4369728a-44b6-444c-8acb-d137136ef7a0">
+<img height=25% width=45% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/503045a2-d013-42d4-b786-f3dd91af053d">
 
 
+<img height=25% width=45% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/31dfea60-84a2-4e07-bca4-d2520c65db81">
 
-## DF.INFO
+<img height=25% width=45% src="https://github.com/ROHITJAIND/EX-04-MULTIVARIATE-ANALYSIS/assets/118707073/c17932ac-ff8a-4c2a-865e-c114a80e31c4">
 
-![Screenshot 2023-05-29 221528](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/1ef80e34-6135-4b1c-9861-325ca68ba4b6)
-
-
-## NULL.SUM()
-
-![Screenshot 2023-05-29 221533](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/2cc6ca6b-5845-4642-a7d7-5f447d2ee459)
-
-
-## AFTER CLEANING
-
-![Screenshot 2023-05-29 221537](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/b232c05d-f749-4cd6-bf1b-cda721215b5d)
-
-
-## DATA TYPES
-
-![Screenshot 2023-05-29 221543](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/76135a34-d20e-4fdd-a4fd-20148884cd3c)
-
-
-## SCATTER PLOT
-
-![Screenshot 2023-05-29 221554](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/7937009f-1074-4acf-91ec-bc3de72a7f48)
-
-
-## BARPLOT
-![image](https://github.com/Mounesh07/ODD2023-Datascience-Ex-04/assets/118343401/4d6bead2-4b2a-466a-b7d5-ea9a217ad035)
-![image](https://github.com/Mounesh07/ODD2023-Datascience-Ex-04/assets/118343401/63c9efd3-3ce1-4092-b925-2b02901d36af)
-![image](https://github.com/Mounesh07/ODD2023-Datascience-Ex-04/assets/118343401/4ea66554-4643-4cfd-9dc8-1185236e7b3d)
-![image](https://github.com/Mounesh07/ODD2023-Datascience-Ex-04/assets/118343401/877ae9a3-33f3-4c93-8ccd-cbaaa3cf845a)
-
-
-## CORRELATION COEFFICIENT INTERPRETATION
-
-![Screenshot 2023-05-29 221657](https://github.com/Nagul71/Ex-04-Multivariate-Analysis/assets/118661118/5c0a6765-8c65-4d9f-acd5-fa88d9e00bc4)
-
-
-## HEATMAP
-
-![image](https://github.com/Mounesh07/ODD2023-Datascience-Ex-04/assets/118343401/c5025dda-505a-4de1-aebc-bb30d0169420)
-
-
-# RESULT:
+## RESULT:
 
 Thus we have read the given data and performed the multivariate analysis with different types of plots.
